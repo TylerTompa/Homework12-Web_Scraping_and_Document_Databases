@@ -5,21 +5,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Mission to Mars</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
 
         <div class="container-fluid">
                 <div class="jumbotron text-center">
-                  <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Get Data!</a></p>
+                    <h1>Mission to Mars</h1>
+                  <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Data!</a></p>
                 </div>
-              
-              <div>
-                  Latest article title: {{ mars.latest_article_title }} <br>
-                  Latest article text: {{ mars.latest_artitle_paragraph }}
-              </div>
 
-              </div>
-              </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h1>Latest Mars New</h1>
+                        <h4>{{ mars.latest_article_title }}</h4>
+                        {{ mars.latest_article_paragraph }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h1>Featured Mars Image</h1>
+                        <img src="{{mars.featured_image_url}}" class="img-thumbnail">
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h1>Current Weather on Mars</h1>
+                                {{ mars.latest_weather_tweet }}
+                            </div>e
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h1>Mars Facts</h1>
+                                {{ mars.mars_facts_table | safe  }}
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h1 style="text-align:center">Mars Hemispheres</h1><hr style="height:3px">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <img src="{{mars.cerberus_hemisphere_image_url}}" class="img-thumbnail">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h2>cerberus_hemisphere</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <img src="{{mars.schiaparelli_hemisphere_image_url}}" class="img-thumbnail">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h2>Schiaparelli Hemisphere</h2>
+                                </div>
+                            </div>
+                        </div>
+
+
+                </div>
+
+                <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <img src="{{mars.syrtis_major_hemisphere_image_url}}" class="img-thumbnail">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h2>Syrtis Major Hemisphere</h2>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <img src="{{mars.valles_marineris_hemisphere_image_url}}" class="img-thumbnail">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <h2>Valles Marineris Hemisphere</h2>
+                                    </div>
+                                </div>
+                            </div>
+    
+    
+                    </div>
+                
+
+        </div>
     
 </body>
 </html>

@@ -1,11 +1,4 @@
 
-# coding: utf-8
-
-# # In this project we scrape several webpages for data on Mars.
-
-# In[1]:
-
-
 import os
 
 from bs4 import BeautifulSoup as bs
@@ -15,6 +8,8 @@ import requests
 import pandas as pd
 
 def scrape():
+
+
     # ## In this section we scrape the NASA Mars news site:
     # https://mars.nasa.gov/news/?page=0&per_page=40&order=publish_date+desc%2Ccreated_at+desc&search=&category=19%2C165%2C184%2C204&blank_scope=Latest
 
@@ -202,109 +197,142 @@ def scrape():
     # In[25]:
 
 
-    mars_facts_table_json = mars_facts_table_dataframe.to_json()
-    type(mars_facts_table_json)
+    mars_facts_table_dataframe = mars_facts_table_dataframe.set_index([0])
+    mars_facts_table_dataframe
 
 
     # In[26]:
 
 
-    mars_facts_html_table_string = mars_facts_tables[0].to_html()
+    mars_facts_table_dataframe["Values"] = mars_facts_table_dataframe[1]
+    mars_facts_table_dataframe = mars_facts_table_dataframe.drop(mars_facts_table_dataframe.columns[0], axis=1)
+    mars_facts_table_dataframe
 
 
     # In[27]:
 
 
+    mars_facts_table_dataframe.index.rename("Description", inplace=True)
+
+
+    # In[28]:
+
+
+    mars_facts_table_dataframe
+
+
+    # In[29]:
+
+
+    mars_facts_html_table_string = mars_facts_table_dataframe.to_html()
+
+
+    # In[30]:
+
+
     mars_facts_html_table_string
+
+
+    # In[31]:
+
+
+    type(mars_facts_html_table_string)
+
+
+    # In[32]:
+
+
+    mars_facts_table_json = mars_facts_table_dataframe.to_json()
+    mars_facts_table_json
 
 
     # ## In this section we visit the USGS Astrogeology site to obtain high resolution images for each of Mars's hemispheres.
 
-    # In[28]:
+    # In[33]:
 
 
     cerebrus_hemisphere_site = requests.get("https://astrogeology.usgs.gov/search/map/Mars/Viking/cerberus_enhanced")
     cerebrus_hemisphere_site
 
 
-    # In[29]:
+    # In[34]:
 
 
     cerebrus_hemisphere_soup = bs(cerebrus_hemisphere_site.text, "html.parser")
 
 
-    # In[30]:
+    # In[35]:
 
 
     schiaparelli_hemisphere_site = requests.get("https://astrogeology.usgs.gov/search/map/Mars/Viking/schiaparelli_enhanced")
     schiaparelli_hemisphere_site
 
 
-    # In[31]:
+    # In[36]:
 
 
     schiaparelli_hemisphere_soup = bs(schiaparelli_hemisphere_site.text, "html.parser")
 
 
-    # In[32]:
+    # In[37]:
 
 
     syrtis_major_hemisphere_site = requests.get("https://astrogeology.usgs.gov/search/map/Mars/Viking/syrtis_major_enhanced")
     syrtis_major_hemisphere_site
 
 
-    # In[33]:
+    # In[38]:
 
 
     syrtis_major_hemisphere_soup = bs(syrtis_major_hemisphere_site.text, "html.parser")
 
 
-    # In[34]:
+    # In[39]:
 
 
     valles_marineris_hemisphere_site = requests.get("https://astrogeology.usgs.gov/search/map/Mars/Viking/valles_marineris_enhanced")
     valles_marineris_hemisphere_site
 
 
-    # In[35]:
+    # In[40]:
 
 
     valles_marineris_hemisphere_soup = bs(valles_marineris_hemisphere_site.text, "html.parser")
 
 
-    # In[36]:
+    # In[41]:
 
 
     mars_hemisphere_soups_list = [cerebrus_hemisphere_soup, schiaparelli_hemisphere_soup, syrtis_major_hemisphere_soup, valles_marineris_hemisphere_soup]
 
 
-    # In[37]:
+    # In[42]:
 
 
     mars_hemisphere_images_list = [mars_hemisphere.find("div", class_="downloads") for mars_hemisphere in mars_hemisphere_soups_list]
 
 
-    # In[38]:
+    # In[43]:
 
 
     mars_hemisphere_image_urls_list = [mars_hemisphere_image.find("a").get("href") for mars_hemisphere_image in mars_hemisphere_images_list]
     mars_hemisphere_image_urls_list
 
 
-    # In[39]:
+    # In[44]:
 
 
     mars_hemisphere_names_list = ["Cerberus", "Schiaparelli", "Syrtis_Major", "Valles_Marineris"] 
 
 
-    # In[40]:
+    # In[45]:
 
 
     mars_hemisphere_name_and_image_urls_dictionary = dict(zip(mars_hemisphere_names_list, mars_hemisphere_image_urls_list))
     mars_hemisphere_name_and_image_urls_dictionary
 
 
-    # In[41]:
+    # In[46]:
 
 
     # I tried to make a dictionary of the hemisphere names and image URLs by doing this.
@@ -317,19 +345,20 @@ def scrape():
 
     # ## In this section, we create a dictionary of all the data we have scraped hitherto.
 
-    # In[42]:
+    # In[47]:
 
 
     mars_data_dictionary = {"latest_article_title": nasa_news_article_title,
-                            "latest_artitle_paragraph": nasa_news_article_paragraph,
+                            "latest_article_paragraph": nasa_news_article_paragraph,
                             "featured_image_url": featured_image_url,
                             "latest_weather_tweet": mars_twitter_page_latest_tweet,
-                            "mars_facts_table": mars_facts_table_json,
+                            "mars_facts_table": mars_facts_html_table_string,
                             "cerberus_hemisphere_image_url": mars_hemisphere_image_urls_list[0],
                             "schiaparelli_hemisphere_image_url": mars_hemisphere_image_urls_list[1],
                             "syrtis_major_hemisphere_image_url": mars_hemisphere_image_urls_list[2],
                             "valles_marineris_hemisphere_image_url": mars_hemisphere_image_urls_list[3]                       
                         }
     mars_data_dictionary
-    
+
     return mars_data_dictionary
+
